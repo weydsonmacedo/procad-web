@@ -1,0 +1,35 @@
+/* .auth{
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    align-items: center;
+  }
+  
+  .title-auth-container{
+    
+    font-style: normal;
+    font-size: 72px;
+    color: #000000;
+    display: flex;
+    justify-content: end;
+    flex: 1;
+  }
+  .title-auth {
+    max-width: 500px;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+  }
+  
+  .procad{
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  .subtitle{
+    margin: 0;
+    font-size: 40px;
+  }
+  
+  
+  .container {
+    max-width: 1044px;
+  } */

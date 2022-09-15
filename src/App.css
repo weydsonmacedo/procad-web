@@ -1,0 +1,14 @@
+
+.App {
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.fnt-normal {
+  font-size: 13px !important;
+}
+
+.fnt-color-black {
+  color: #000000 !important
+}
