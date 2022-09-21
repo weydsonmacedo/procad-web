@@ -1,11 +1,16 @@
 const express = require('express')
 
-//const { resolve } = require('path')
+const { resolve } = require('path')
 
 const app = express()
 
 app.use('/',
-    express.static('./build')    
+    express.static(
+        resolve(
+            __dirname,
+            './build'
+        )
+    )
 )
 
 app.listen(process.env.PORT || 3000, (err) => {
