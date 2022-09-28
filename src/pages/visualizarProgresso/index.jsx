@@ -118,6 +118,10 @@ const VisualizarProgresso = () => {
 			saveAs(content, `Comprovantes_${Math.floor(Date.now() * Math.random()).toString(36)}`);
 		});
 
+		const mergedPdf = await merger.saveAsBlob();
+        const url = URL.createObjectURL(mergedPdf);		
+    	window.open(url);
+
 	}
 
 	return (

@@ -204,7 +204,7 @@ export default function GerarRelatorio() {
 
             <div className="gerar-relatorio-action">
                 <button className="btn-gerar-relatorio" onClick={goBack}>Voltar</button>
-                <button className="btn-gerar-relatorio" onClick={printPage}>Imprimir Relatório</button>
+                <button className="btn-gerar-relatorio" onClick={printPage}>Imprimir Relatório (PDF)</button>
                 <button className="btn-gerar-relatorio" onClick={() => htmlToCSV('Relatorio.csv')}>Download CSV</button>
             </div>
 
