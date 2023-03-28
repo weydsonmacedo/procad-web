@@ -44,10 +44,10 @@ const AtividadeModal = ({ open, handleClose, atividade, onSubmit }) => {
     }
 
     const intersticio = {
-        period1: `${dates.p1.year()}.${dates.p1.month() < 7 ? 1 : 2}`,
-        period2: `${dates.p2.year()}.${dates.p2.month() < 7 ? 1 : 2}`,
-        period3: `${dates.p3.year()}.${dates.p3.month() < 7 ? 1 : 2}`,
-        period4: `${dates.p4.year()}.${dates.p4.month() < 7 ? 1 : 2}`,
+        period1: `${dates.p1.year()}.${dates.p1.month() < 6 ? 1 : 2}`,
+        period2: `${dates.p2.year()}.${dates.p2.month() < 6 ? 1 : 2}`,
+        period3: `${dates.p3.year()}.${dates.p3.month() < 6 ? 1 : 2}`,
+        period4: `${dates.p4.year()}.${dates.p4.month() < 6 ? 1 : 2}`,
     }
 
     const [upFiles, setUploadedFiles] = useState([]);
