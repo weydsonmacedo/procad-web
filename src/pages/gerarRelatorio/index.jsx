@@ -5,6 +5,8 @@ import './style.css';
 import { useHistory, useParams } from "react-router-dom";
 import { getFormulary } from '../../store/reducers/formulary';
 import { getActivitiesCompleted } from '../../store/reducers/report';
+import { sendEmail } from '../../store/reducers/report';
+/*import * as puppeteer from 'puppeteer';*/
 
 export default function GerarRelatorio() {
 
@@ -14,11 +16,14 @@ export default function GerarRelatorio() {
 
     const history = useHistory();
 
+
+
     useEffect(() => {
 
         async function fetchData() {
             let formulary = await getFormulary(params.formularyId, dispatch).catch(console.log);
             let answers = (formulary || {}).dbFormularyAnswers || [];
+            let dbUser =  (formulary || {}).dbUser || [];
             getActivitiesCompleted(answers, dispatch);
         }
 
@@ -28,7 +33,9 @@ export default function GerarRelatorio() {
     const [user, setUser] = useState({
         firstName: localStorage.getItem("firstName") || "User",
         lastName: localStorage.getItem("lastName") || "Name",
-        siape: localStorage.getItem("siape") || "XXXXXXX"
+        siape: localStorage.getItem("siape") || "XXXXXXX",
+        email: state.formulary.data.dbUser[0].email,
+
     });
 
     const { type = "N/A", comission = [], from, to } = ((state.formulary.data || {}).dbFormulary || {});
@@ -50,6 +57,19 @@ export default function GerarRelatorio() {
 
     const printPage = () => {
         window.print();
+    }
+
+    async function generatePdfFromHtml() {
+      
+        let completeName = user.firstName + " " + user.lastName;
+       let mail = {
+            userName: completeName,
+            html: '<html>' + document.getElementById('relatorio-content').outerHTML + '</html>',
+            mailSetting: {
+                to: user.email,
+            }
+        };
+        sendEmail(mail, dispatch);
     }
 
     const goBack = () => {
@@ -206,6 +226,7 @@ export default function GerarRelatorio() {
                 <button className="btn-gerar-relatorio" onClick={goBack}>Voltar</button>
                 <button className="btn-gerar-relatorio" onClick={printPage}>Imprimir Relatório (PDF)</button>
                 <button className="btn-gerar-relatorio" onClick={() => htmlToCSV('Relatorio.csv')}>Download CSV</button>
+                <button className="btn-gerar-relatorio" onClick={() =>generatePdfFromHtml()}>Enviar por Email (PDF)</button>
             </div>
 
             <div style={{ marginLeft: '20%', marginRight: '20%' }}>

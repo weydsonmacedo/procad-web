@@ -54,6 +54,7 @@ export const setLoading = (isLoading, dispatch) => dispatch({ type: ActionsTypes
 export const setFields = (fields, dispatch) => dispatch({ type: ActionsTypes.GET_FIELDS, payload: fields })
 export const setActivities = (activities, dispatch) => dispatch({ type: ActionsTypes.GET_ACTIVITIES, payload: activities })
 export const setAllActivities = (activities, dispatch) => dispatch({ type: ActionsTypes.SET_ALL_ACTIVITIES, payload: activities })
+export const setEmail = (data, dispatch) => dispatch({ type: ActionsTypes.GET_FORMULARY, payload: data })
 
 export function getFields(dispatch) {
 	setLoading(true, dispatch);
@@ -114,5 +115,23 @@ export async function getActivitiesCompleted(list, dispatch){
 		.finally(r => {
 			setLoading(false, dispatch);
 		})        
+}
+
+
+
+export async function sendEmail(mail, dispatch) {
+	setLoading(true, dispatch);
+	return await axios.post('/email', mail)
+	.then(({data}) => {
+		return data;
+		
+	})
+	.catch(err => {
+		console.log(err);
+		throw err;
+	})
+	.finally(res => {
+		setLoading(false, dispatch);
+	})
 }
 
