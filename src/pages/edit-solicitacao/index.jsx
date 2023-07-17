@@ -148,9 +148,9 @@ const EditSolicitacao = () => {
     }
 
     try {
-      const data = await createFormulary(dto, dispatch);
+      //const data = await createFormulary(dto, dispatch);
       setSuccess(true);
-      history.push(`/relatorio-de-atividades/${data.id}`);
+      //history.push(`/relatorio-de-atividades/${data.id}`);
     } catch (error) {
       setErrorMessage(error.response.data.error);
       setOpen(true);
