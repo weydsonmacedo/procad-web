@@ -42,7 +42,7 @@ export default function FormulariesTable({ list, onDeleteClick }) {
   const history = useHistory();
 
   const handleClickEdit = (solicitacaoId) => {
-    history.push(`/edit-solicitacao/${solicitacaoId}`);
+    history.push(`/solicitacao/${solicitacaoId}`);
   };
 
   const handleClickViewProgress = (solicitacaoId) => {
