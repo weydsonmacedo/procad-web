@@ -32,6 +32,22 @@ const EditSolicitacao = () => {
   const [state, dispatch] = useContext(GlobalStateContext);
   const history = useHistory();
 
+  const getRole = () => {
+    let role = state.common.roles.filter(
+      (r) => r.id === ((state.formulary.data || {}).dbFormulary || {}).roleId
+    );
+
+    let name = "N/A";
+
+    if (!!role.length) {
+      name = role.map((r) => {
+        return r.id;
+      });
+    }
+
+    return name;
+  };
+
   const [user, setUser] = useState({
     firstName: localStorage.getItem("firstName") || "User",
     lastName: localStorage.getItem("lastName") || "Name",
@@ -45,7 +61,7 @@ const EditSolicitacao = () => {
   const [errorMessage, setErrorMessage] = React.useState("");
   const [success, setSuccess] = React.useState(false);
 
-  const [roleId, setRoleId] = useState("");
+  const [roleId, setRoleId] = useState(getRole()[0]);
   const [classId, setClassId] = useState("");
   const [levelId, setLevelId] = useState("");
 
