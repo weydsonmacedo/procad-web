@@ -14,9 +14,13 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { ArrowBack, Add, Delete } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import { Link, useRouteMatch, useParams } from "react-router-dom";
+import { getFormulary } from "../../store/reducers/formulary";
+import { getFields, getActivitiesCompleted } from "../../store/reducers/report";
+import ReportHeader from "../../components/ReportHeader";
+
 import PaperContainer from "../../components/PaperContainer";
-import { createFormulary } from "../../store/reducers/formulary";
+// import { createFormulary } from "../../store/reducers/formulary";
 import { GlobalStateContext } from "../../store";
 import moment from "moment";
 import { useHistory } from "react-router";
@@ -30,23 +34,31 @@ const SnackAlert = React.forwardRef(function Alert(props, ref) {
 
 const EditSolicitacao = () => {
   const [state, dispatch] = useContext(GlobalStateContext);
+  const match = useRouteMatch();
+  const params = useParams();
   const history = useHistory();
 
-  const getRole = () => {
-    let role = state.common.roles.filter(
-      (r) => r.id === ((state.formulary.data || {}).dbFormulary || {}).roleId
-    );
+  useEffect(() => {
+    async function fetchCommonData() {
+      getLevels(dispatch);
+      getRoles(dispatch);
+    }
+    fetchCommonData();
 
-    let name = "N/A";
+    async function fetchData() {
+      let formulary = await getFormulary(params.formularyId, dispatch).catch(
+        console.log
+      );
+      await getFields(dispatch);
+      console.log();
 
-    if (!!role.length) {
-      name = role.map((r) => {
-        return r.id;
-      });
+      let answers = (formulary || {}).dbFormularyAnswers || [];
+      await getActivitiesCompleted(answers, dispatch);
     }
 
-    return name;
-  };
+    fetchData();
+    console.log(state);
+  }, []);
 
   const [user, setUser] = useState({
     firstName: localStorage.getItem("firstName") || "User",
@@ -61,7 +73,7 @@ const EditSolicitacao = () => {
   const [errorMessage, setErrorMessage] = React.useState("");
   const [success, setSuccess] = React.useState(false);
 
-  const [roleId, setRoleId] = useState(getRole()[0]);
+  const [roleId, setRoleId] = useState(state.formulary.data.dbFormulary.roleId);
   const [classId, setClassId] = useState("");
   const [levelId, setLevelId] = useState("");
 
@@ -199,8 +211,9 @@ const EditSolicitacao = () => {
             <ArrowBack />
           </IconButton>
         </Link>
-        <Typography variant="h6">Nova Progressão</Typography>
+        <Typography variant="h6">Edite sua Progressão</Typography>
       </div>
+      <ReportHeader />
 
       <PaperContainer>
         <form onSubmit={handleSubmit}>
@@ -405,7 +418,7 @@ const EditSolicitacao = () => {
               onClick={handleCancelarSolicitacao}
               startIcon={<Delete />}
             >
-              Cancelar Solicitação
+              Cancelar Edição
             </Button>
 
             <Button
@@ -414,7 +427,6 @@ const EditSolicitacao = () => {
               color="primary"
               size="large"
               type="submit"
-              startIcon={<Add />}
             >
               Relatório de Atividades
             </Button>
