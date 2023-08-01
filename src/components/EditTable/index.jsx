@@ -58,7 +58,7 @@ export default function EditTable() {
     x.subtract(2, "y");
     x.add(1, "d");
     if (x.isValid()) {
-      setEndDate(x.format("yyyy-MM-DD"));
+      setStartDate(x.format("yyyy-MM-DD"));
     }
   };
 
@@ -130,8 +130,38 @@ export default function EditTable() {
     }
   };
 
-  function Test() {
-    return state.formulary.data.dbFormulary.roleId;
+  function GetRoleId() {
+    return ((state.formulary.data || {}).dbFormulary || {}).roleId;
+  }
+
+  function GetLevelId() {
+    return ((state.formulary.data || {}).dbFormulary || {}).levelId;
+  }
+
+  function GetEndDate() {
+    const date = new Date(((state.formulary.data || {}).dbFormulary || {}).to);
+    const formatedDate = `${date.getFullYear()}-${addLeadingZero(
+      date.getMonth() + 1
+    )}-${addLeadingZero(date.getDate())}`;
+    return formatedDate;
+  }
+
+  function GetStartDate() {
+    const date = new Date(
+      ((state.formulary.data || {}).dbFormulary || {}).from
+    );
+    const formatedDate = `${date.getFullYear()}-${addLeadingZero(
+      date.getMonth() + 1
+    )}-${addLeadingZero(date.getDate())}`;
+    return formatedDate;
+  }
+
+  function addLeadingZero(value) {
+    return value < 10 ? "0" + value : value;
+  }
+
+  function GetClassId() {
+    return ((state.formulary.data || {}).dbFormulary || {}).classId;
   }
 
   const [user, setUser] = useState({
@@ -139,6 +169,8 @@ export default function EditTable() {
     lastName: localStorage.getItem("lastName") || "Name",
     siape: localStorage.getItem("siape") || "XXXXXXX",
   });
+
+  const [startDate, setStartDate] = useState("");
 
   const [endDate, setEndDate] = useState("");
 
@@ -152,12 +184,15 @@ export default function EditTable() {
   const [levelId, setLevelId] = useState("");
 
   useEffect(() => {
-    setRoleId(Test());
+    setRoleId(GetRoleId());
+    setLevelId(GetLevelId());
+    setEndDate(GetEndDate());
+    setStartDate(GetStartDate());
+    setClassId(GetClassId);
   }, [state]);
 
   return (
     <PaperContainer>
-      <h1>{Test()}</h1>
       <form onSubmit={handleSubmit}>
         <div style={{ display: "flex" }}>
           <div style={{ flex: 1 }}>
@@ -226,7 +261,7 @@ export default function EditTable() {
                     label="Início"
                     size="small"
                     variant="outlined"
-                    value={endDate}
+                    value={startDate}
                     type="date"
                     name="dataInicio"
                     disabled
@@ -241,6 +276,7 @@ export default function EditTable() {
                     name="dataFim"
                     size="small"
                     variant="outlined"
+                    value={endDate}
                     onChange={handleStartDateChange}
                     type="date"
                     InputLabelProps={{
