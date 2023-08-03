@@ -14,7 +14,7 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { ArrowBack, Add, Delete } from "@material-ui/icons";
-
+import { Link, useRouteMatch, useParams } from "react-router-dom";
 import PaperContainer from "../../components/PaperContainer";
 import { GlobalStateContext } from "../../store";
 import moment from "moment";
@@ -28,10 +28,12 @@ const SnackAlert = React.forwardRef(function Alert(props, ref) {
 
 export default function EditTable() {
   const [state, dispatch] = useContext(GlobalStateContext);
+  const params = useParams();
+
   const history = useHistory();
 
   useEffect(() => {
-    console.log(state);
+    console.log(params);
   }, []);
 
   const handleClose = (event, reason) => {
@@ -132,8 +134,7 @@ export default function EditTable() {
     try {
       //const data = await createFormulary(dto, dispatch);
       setSuccess(true);
-      console.log(dto);
-      //history.push(`/relatorio-de-atividades/${data.id}`);
+      history.push(`/relatorio-de-atividades/${params.formularyId}`);
     } catch (error) {
       setErrorMessage(error.response.data.error);
       setOpen(true);
