@@ -66,6 +66,15 @@ export default function EditTable() {
     history.push("/");
   };
 
+  function handleInputComissionChange(event) {
+    console.log(event);
+    const { name, value } = event.target;
+    setComission((prevComission) => ({
+      ...prevComission,
+      [name]: value,
+    }));
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const {
@@ -123,6 +132,7 @@ export default function EditTable() {
     try {
       //const data = await createFormulary(dto, dispatch);
       setSuccess(true);
+      console.log(dto);
       //history.push(`/relatorio-de-atividades/${data.id}`);
     } catch (error) {
       setErrorMessage(error.response.data.error);
@@ -146,6 +156,10 @@ export default function EditTable() {
     return formatedDate;
   }
 
+  function GetComission() {
+    return ((state.formulary.data || {}).dbFormulary || {}).comission;
+  }
+
   function GetStartDate() {
     const date = new Date(
       ((state.formulary.data || {}).dbFormulary || {}).from
@@ -164,6 +178,23 @@ export default function EditTable() {
     return ((state.formulary.data || {}).dbFormulary || {}).classId;
   }
 
+  function GetTypeFormulary() {
+    return ((state.formulary.data || {}).dbFormulary || {}).type;
+  }
+
+  const updateComission = (atributte, index, newName) => {
+    const updatedComission = { ...comission };
+
+    if (updatedComission) {
+      updatedComission[index] = {
+        ...updatedComission[index],
+        [atributte]: newName,
+      };
+
+      setComission(updatedComission);
+    }
+  };
+
   const [user, setUser] = useState({
     firstName: localStorage.getItem("firstName") || "User",
     lastName: localStorage.getItem("lastName") || "Name",
@@ -174,7 +205,7 @@ export default function EditTable() {
 
   const [endDate, setEndDate] = useState("");
 
-  const [solicitacao, setSolicitacao] = React.useState("female");
+  const [solicitacao, setSolicitacao] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
   const [success, setSuccess] = React.useState(false);
@@ -182,13 +213,16 @@ export default function EditTable() {
   const [roleId, setRoleId] = useState("");
   const [classId, setClassId] = useState("");
   const [levelId, setLevelId] = useState("");
+  const [comission, setComission] = useState({});
 
   useEffect(() => {
     setRoleId(GetRoleId());
     setLevelId(GetLevelId());
     setEndDate(GetEndDate());
     setStartDate(GetStartDate());
-    setClassId(GetClassId);
+    setClassId(GetClassId());
+    setComission(GetComission());
+    setSolicitacao(GetTypeFormulary());
   }, [state]);
 
   return (
@@ -369,21 +403,72 @@ export default function EditTable() {
           <Typography color="textSecondary">Comissão</Typography>
 
           <div style={{ display: "flex", gap: 24, marginBottom: 16 }}>
-            <TextField label="Professor" name="primeiroProfessor" />
-            <TextField label="Departamento" name="primeiroDepartamento" />
-            <TextField label="Instituto" name="primeiroInstituto" />
+            <TextField
+              label="Professor"
+              name="primeiroProfessor"
+              value={comission && comission[0]?.professorName}
+              onChange={(e) =>
+                updateComission("professorName", 0, e.target.value)
+              }
+            />
+            <TextField
+              label="Departamento"
+              name="primeiroDepartamento"
+              value={comission && comission[0]?.department}
+              onChange={(e) => updateComission("department", 0, e.target.value)}
+            />
+            <TextField
+              label="Instituto"
+              name="primeiroInstituto"
+              value={comission && comission[0]?.institute}
+              onChange={(e) => updateComission("institute", 0, e.target.value)}
+            />
           </div>
 
           <div style={{ display: "flex", gap: 24, marginBottom: 16 }}>
-            <TextField label="Professor" name="segundoProfessor" />
-            <TextField label="Departamento" name="segundoDepartamento" />
-            <TextField label="Instituto" name="segundoInstituto" />
+            <TextField
+              label="Professor"
+              name="segundoProfessor"
+              value={comission && comission[1]?.professorName}
+              onChange={(e) =>
+                updateComission("professorName", 1, e.target.value)
+              }
+            />
+            <TextField
+              label="Departamento"
+              name="segundoDepartamento"
+              value={comission && comission[1]?.department}
+              onChange={(e) => updateComission("department", 1, e.target.value)}
+            />
+            <TextField
+              label="Instituto"
+              name="segundoInstituto"
+              value={comission && comission[1]?.institute}
+              onChange={(e) => updateComission("institute", 1, e.target.value)}
+            />
           </div>
 
           <div style={{ display: "flex", gap: 24 }}>
-            <TextField label="Professor" name="terceiroProfessor" />
-            <TextField label="Departamento" name="terceiroDepartamento" />
-            <TextField label="Instituto" name="terceiroInstituo" />
+            <TextField
+              label="Professor"
+              name="terceiroProfessor"
+              value={comission && comission[2]?.professorName}
+              onChange={(e) =>
+                updateComission("professorName", 2, e.target.value)
+              }
+            />
+            <TextField
+              label="Departamento"
+              name="terceiroDepartamento"
+              value={comission && comission[2]?.department}
+              onChange={(e) => updateComission("department", 2, e.target.value)}
+            />
+            <TextField
+              label="Instituto"
+              name="terceiroInstituo"
+              value={comission && comission[2]?.institute}
+              onChange={(e) => updateComission("institute", 2, e.target.value)}
+            />
           </div>
         </div>
 
@@ -429,7 +514,7 @@ export default function EditTable() {
           severity="success"
           sx={{ width: "100%" }}
         >
-          Solicitação Criada!
+          Formulário Editado!
         </SnackAlert>
       </Snackbar>
     </PaperContainer>
