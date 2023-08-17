@@ -57,6 +57,7 @@ export default function EditTable() {
 
   const handleStartDateChange = (event) => {
     let x = moment(event.target.value, "yyyy-MM-DD");
+    setEndDate(x.format("yyyy-MM-DD"));
     x.subtract(2, "y");
     x.add(1, "d");
     if (x.isValid()) {
@@ -134,7 +135,7 @@ export default function EditTable() {
     try {
       //const data = await createFormulary(dto, dispatch);
       setSuccess(true);
-      history.push(`/relatorio-de-atividades/${params.formularyId}`);
+      // history.push(`/relatorio-de-atividades/${params.formularyId}`);
     } catch (error) {
       setErrorMessage(error.response.data.error);
       setOpen(true);
