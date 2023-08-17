@@ -134,6 +134,23 @@ export async function createFormulary(form, dispatch) {
     });
 }
 
+export async function updateFormulary(form, dispatch, formId) {
+  setLoading(true, dispatch);
+  return await axios
+    .put(`/formulary/${formId}`, form)
+    .then(({ data }) => {
+      setFormulary(data, dispatch);
+      return data;
+    })
+    .catch((err) => {
+      console.log(err);
+      throw err;
+    })
+    .finally((res) => {
+      setLoading(false, dispatch);
+    });
+}
+
 export function closeFormulary(form, dispatch) {
   setLoading(true, dispatch);
   return axios

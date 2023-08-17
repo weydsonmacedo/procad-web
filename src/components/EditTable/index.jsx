@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
-  Container,
-  IconButton,
   Button,
   Typography,
   FormControl,
@@ -10,17 +8,17 @@ import {
   Radio,
   TextField,
   Select,
-  InputLabel,
   MenuItem,
 } from "@material-ui/core";
-import { ArrowBack, Add, Delete } from "@material-ui/icons";
-import { Link, useRouteMatch, useParams } from "react-router-dom";
+import { Delete } from "@material-ui/icons";
+import { useParams } from "react-router-dom";
 import PaperContainer from "../../components/PaperContainer";
 import { GlobalStateContext } from "../../store";
 import moment from "moment";
 import { useHistory } from "react-router";
-import { CircularProgress, Snackbar } from "@mui/material";
+import { Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
+import { updateFormulary } from "../../store/reducers/formulary";
 
 const SnackAlert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -31,10 +29,6 @@ export default function EditTable() {
   const params = useParams();
 
   const history = useHistory();
-
-  useEffect(() => {
-    console.log(params);
-  }, []);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -68,15 +62,6 @@ export default function EditTable() {
   const handleCancelarSolicitacao = () => {
     history.push("/");
   };
-
-  function handleInputComissionChange(event) {
-    console.log(event);
-    const { name, value } = event.target;
-    setComission((prevComission) => ({
-      ...prevComission,
-      [name]: value,
-    }));
-  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -133,9 +118,9 @@ export default function EditTable() {
     }
 
     try {
-      //const data = await createFormulary(dto, dispatch);
+      await updateFormulary(dto, dispatch, params.formularyId);
       setSuccess(true);
-      // history.push(`/relatorio-de-atividades/${params.formularyId}`);
+      history.push(`/relatorio-de-atividades/${params.formularyId}`);
     } catch (error) {
       setErrorMessage(error.response.data.error);
       setOpen(true);
