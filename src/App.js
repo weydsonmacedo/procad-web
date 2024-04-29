@@ -1,50 +1,46 @@
-import './App.css';
-import Auth from './pages/auth';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route
-} from 'react-router-dom';
-import PrivateRoute from './components/PrivateRoute';
-import Dashboard from './pages/dashboard';
+import "./App.css";
+import Auth from "./pages/auth";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import PrivateRoute from "./components/PrivateRoute";
+import Dashboard from "./pages/dashboard";
 import { ThemeProvider, createTheme } from "@material-ui/core";
-import Store from './store';
-import NovaProgressao from './pages/nova-progressao';
-import VisualizarPerfil from './pages/visualizarPerfil';
-import Header from './components/Header';
-import RelatorioAtividades from './pages/relatorio-atividades';
-import axios from 'axios';
-import moment from 'moment';
+import Store from "./store";
+import NovaProgressao from "./pages/nova-progressao";
+import EditSolicitacao from "./pages/edit-solicitacao";
+import VisualizarPerfil from "./pages/visualizarPerfil";
+import Header from "./components/Header";
+import RelatorioAtividades from "./pages/relatorio-atividades";
+import axios from "axios";
+import moment from "moment";
 import GerarRelatorio from "./pages/gerarRelatorio";
-
 
 moment.locale();
 
 axios.interceptors.request.use(
-  config => {
+  (config) => {
     const token = localStorage.getItem("token");
     config.headers["x-access-token"] = token;
     return config;
   },
-  error => {
+  (error) => {
     return Promise.reject(error);
   }
-)
+);
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#086972',
-    }
+      main: "#086972",
+    },
   },
   spacing: 8,
   typography: {
     fontFamily: "'Poppins', sans-serif'",
     allVariants: {
-      fontFamily: "'Poppins', sans-serif'"
-    }
-  }
-})
+      fontFamily: "'Poppins', sans-serif'",
+    },
+  },
+});
 
 function App() {
   return (
@@ -52,7 +48,6 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router>
           <Switch>
-
             <Route path="/login" component={Auth} />
             <Route path="/cadastro" component={Auth} />
             <Route path="/forgotPassword" component={Auth} />
@@ -73,6 +68,10 @@ function App() {
                 <NovaProgressao />
               </PrivateRoute>
 
+              <PrivateRoute path="/solicitacao/:formularyId">
+                <EditSolicitacao />
+              </PrivateRoute>
+
               <PrivateRoute path="/minha-conta">
                 <VisualizarPerfil />
               </PrivateRoute>
@@ -81,7 +80,6 @@ function App() {
                 <RelatorioAtividades />
               </PrivateRoute>
             </div>
-                        
           </Switch>
         </Router>
       </ThemeProvider>
